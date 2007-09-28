@@ -1,0 +1,10 @@
+Revision history for Perl extension DBI::Printf.
+
+0.03  Thu Sep 28 14:20;00 2007
+        - adjust declaration to pass CPAN indexer
+
+0.02  Thu Sep 28 14:10:00 2007
+        - fix mishandling of %%
+
+0.01  Thu Sep 28 09:16:00 2007
+        - initial version
