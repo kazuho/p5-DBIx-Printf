@@ -1,8 +1,8 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
-name:         DBI-Printf
+name:         DBIx-Printf
 version:      0.03
-version_from: lib/DBI/Printf.pm
+version_from: lib/DBIx/Printf.pm
 installdirs:  site
 requires:
     DBI:                           0

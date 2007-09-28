@@ -11,14 +11,14 @@ sub DBI::db::printf {
     $base =~ s/%([dfs\%])/
         $1 eq '%' ? '%' :
             @params
-                ? DBI::Printf::_printf_quote($self, $1, shift @params)
+                ? DBIx::Printf::_printf_quote($self, $1, shift @params)
                     : die "too few parameters\n"
                         /eg;
     die "too many parameters\n" if @params;
     $base;
 }
 
-package DBI::Printf;
+package DBIx::Printf;
 
 sub _printf_quote {
     my ($dbh, $type, $param) = @_;
@@ -44,11 +44,11 @@ __END__
 
 =head1 NAME
 
-DBI::Printf - A printf-style prepared statement
+DBIx::Printf - A printf-style prepared statement
 
 =head1 SYNOPSIS
 
-  use DBI::Printf;
+  use DBIx::Printf;
 
   my $sql = $dbh->printf(
       'select * from t where str=%s or int=%d or float=%f',
@@ -58,7 +58,7 @@ DBI::Printf - A printf-style prepared statement
 
 =head1 DESCRIPTION
 
-C<DBI::Printf> is a printf-style prepared statement.  It adds a C<printf> method to DBI::db package.
+C<DBIx::Printf> is a printf-style prepared statement.  It adds a C<printf> method to DBI::db package.
 
 =head1 METHODS
 

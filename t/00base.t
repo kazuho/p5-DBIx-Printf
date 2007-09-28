@@ -3,7 +3,7 @@ use warnings;
 
 use Test::More tests => 16;
 
-BEGIN { use_ok('DBI::Printf'); }
+BEGIN { use_ok('DBIx::Printf'); }
 
 my $dbh = DBI->connect('DBI:Mock:', '', '');
 
