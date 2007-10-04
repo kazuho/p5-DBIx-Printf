@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 BEGIN { use_ok('DBIx::Printf'); }
 
@@ -22,6 +22,8 @@ is($dbh->printf('select %f', '1.3e1'), 'select 13', 'single %f given a fp str');
 is($dbh->printf('select %f', "'or 1"), 'select 0', 'single %f given a garbage');
 
 is($dbh->printf('select %s', "don't"), "select 'don''t'", '%s');
+
+is($dbh->printf('select %t', "don't"), "select don't", '%t');
 
 is($dbh->printf('select %d,%d,%d', 1, 2, 3), 'select 1,2,3', 'multiple args');
 

@@ -1,5 +1,8 @@
 Revision history for Perl extension DBIx::Printf.
 
+0.04  Sat Sep 29 05:40:00 2007
+        - move to DBIx namespace
+ 
 0.03  Fri Sep 28 14:20:00 2007
         - adjust declaration to pass CPAN indexer
 

@@ -8,21 +8,32 @@ package main;
 sub DBI::db::printf {
     my ($self, $base, @params) = @_;
     
-    $base =~ s/%([dfs\%])/
-        $1 eq '%' ? '%' :
-            @params
-                ? DBIx::Printf::_printf_quote($self, $1, shift @params)
-                    : die "too few parameters\n"
-                        /eg;
+    $base =~ s/\%(d|f|s|t|\%)/
+        DBIx::Printf::_printf_quote($self, $1, \@params)
+                /eg;
     die "too many parameters\n" if @params;
     $base;
 }
 
 package DBIx::Printf;
 
+our $VERSION = 0.05;
+
 sub _printf_quote {
-    my ($dbh, $type, $param) = @_;
+    my ($dbh, $type, $params) = @_;
+    my $out;
+    
+    return '%' if $type eq '%';
+    
+    return _printf_quote_simple($dbh, $type, $params);
+}
+
+sub _printf_quote_simple {
     no warnings;
+    my ($dbh, $type, $params) = @_;
+    
+    die "too few parameters\n" unless @$params;
+    my $param = shift @$params;
     
     if ($type eq 'd') {
         $param = int($param);
@@ -30,13 +41,14 @@ sub _printf_quote {
         $param = $param + 0;
     } elsif ($type eq 's') {
         $param = $dbh->quote($param);
+    } elsif ($type eq 't') {
+        # pass thru
     } else {
         die "unknown type: $type\n";
     }
+    
     $param;
 }
-
-our $VERSION = 0.03;
 
 1;
 
@@ -66,9 +78,10 @@ C<DBIx::Printf> is a printf-style prepared statement.  It adds a C<printf> metho
 
 Builds a SQL statement from given statement with placeholders and values.  Following placeholders are supported.
 
-  %s - string
   %d - integer
   %f - floating point
+  %s - string
+  %t - do not quote, pass thru
 
 =head1 AUTHOR
 
