@@ -1,5 +1,9 @@
 Revision history for Perl extension DBIx::Printf.
 
+0.05  Thu Oct 04 13:55:00 2007
+        - added %t (passthru) placeholder
+        - added %like(fmt) placeholder
+
 0.04  Sat Sep 29 05:40:00 2007
         - move to DBIx namespace
  
