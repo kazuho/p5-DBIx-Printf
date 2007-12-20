@@ -1,11 +1,16 @@
-use ExtUtils::MakeMaker;
+use inc::Module::Install;
 
-WriteMakefile(
-    NAME          => 'DBIx::Printf',
-    VERSION_FROM  => 'lib/DBIx/Printf.pm',
-    PREREQ_PM     => {
-        'DBI' => 0,
-    },
-    ABSTRACT_FROM => 'lib/DBIx/Printf.pm',
-    AUTHOR        => 'Kazuho Oku',
-);
+name('DBIx-Printf');
+author('Kazuho Oku');
+version_from('lib/DBIx/Printf.pm');
+abstract_from('lib/DBIx/Printf.pm');
+license('perl');
+
+requires('DBI');
+
+build_requires('DBD::Mock');
+
+auto_include;
+auto_install;
+
+WriteAll;

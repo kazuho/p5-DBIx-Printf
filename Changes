@@ -1,5 +1,9 @@
 Revision history for Perl extension DBIx::Printf.
 
+0.06  Thu Des 20 18:08:42 2007
+        - Change from ExtUtils::MakeMaker to Module::Install
+        - Fixed build dependency (add DBD::Mock)
+
 0.05  Thu Oct 04 13:55:00 2007
         - added %t (passthru) placeholder
         - added %like(fmt) placeholder

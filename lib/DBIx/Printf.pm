@@ -15,7 +15,7 @@ sub DBI::db::printf {
 
 package DBIx::Printf;
 
-our $VERSION = 0.05;
+our $VERSION = 0.06;
 
 sub _printf {
     my ($dbh, $fmt, $params, $in_like) = @_;
