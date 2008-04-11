@@ -1,7 +1,0 @@
-Changes
-Makefile.PL
-MANIFEST
-README
-lib/DBIx/Printf.pm
-t/00base.t
-META.yml                                 Module meta-data (added by MakeMaker)
