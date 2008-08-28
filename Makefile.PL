@@ -7,6 +7,7 @@ abstract_from('lib/DBIx/Printf.pm');
 license('perl');
 
 requires('DBI');
+requires('Carp::Clan');
 
 build_requires('DBD::Mock');
 
