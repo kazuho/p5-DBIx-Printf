@@ -4,19 +4,9 @@ use warnings;
 use DBI;
 use Carp::Clan;
 
-package main;
-
-sub DBI::db::printf {
-    my ($dbh, $fmt, @params) = @_;
-    
-    my $sql = DBIx::Printf::_printf($dbh, $fmt, \@params);
-    Carp::Clan::croak "too many parameters\n" if @params;
-    $sql;
-}
-
 package DBIx::Printf;
 
-our $VERSION = 0.07;
+our $VERSION = '0.07';
 
 sub _printf {
     my ($dbh, $fmt, $params, $in_like) = @_;
@@ -82,6 +72,16 @@ sub _printf_quote_simple {
     }
     
     $param;
+}
+
+package main;
+
+sub DBI::db::printf {
+    my ($dbh, $fmt, @params) = @_;
+    
+    my $sql = DBIx::Printf::_printf($dbh, $fmt, \@params);
+    Carp::Clan::croak "too many parameters\n" if @params;
+    $sql;
 }
 
 1;
