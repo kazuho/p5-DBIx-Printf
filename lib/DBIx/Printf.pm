@@ -6,7 +6,7 @@ use Carp::Clan;
 
 package DBIx::Printf;
 
-our $VERSION = '0.07';
+our $VERSION = '0.08';
 
 sub _printf {
     my ($dbh, $fmt, $params, $in_like, $like_escape) = @_;
