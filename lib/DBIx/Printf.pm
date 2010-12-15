@@ -9,14 +9,16 @@ package DBIx::Printf;
 our $VERSION = '0.07';
 
 sub _printf {
-    my ($dbh, $fmt, $params, $in_like) = @_;
+    my ($dbh, $fmt, $params, $in_like, $like_escape) = @_;
     
-    $fmt =~ s/\%(?:([dfst\%])|like\((.*?)\))/
+    $fmt =~ s/\%(?:([dfst\%])|like\((.*?)\)((?i)\s+ESCAPE\s+(['"])(.*?)\4(?:\s+|$))?)/
         _printf_quote({
             dbh      => $dbh,
             params   => $params,
             type     => $1 || 'like',
             like_fmt => $2,
+            like_escape => $3,
+            like_escape_char => defined $like_escape ? $like_escape : $5,
             in_like  => $in_like,
         })
             /eg;
@@ -31,18 +33,27 @@ sub _printf_quote {
         return '%';
     } elsif ($in->{type} eq 'like') {
         return "'"
-            . _printf($in->{dbh}, $in->{like_fmt}, $in->{params}, 1)
-                . "'";
+            . _printf(
+                $in->{dbh},
+                $in->{like_fmt},
+                $in->{params},
+                1,
+                $in->{like_escape_char},
+            ) . "'" . ($in->{like_escape} || '');
     }
     
     return _printf_quote_simple(
-        $in->{dbh}, $in->{type}, $in->{params}, $in->{in_like}
+        $in->{dbh},
+        $in->{type},
+        $in->{params},
+        $in->{in_like},
+        $in->{like_escape_char}
     );
 }
 
 sub _printf_quote_simple {
     no warnings;
-    my ($dbh, $type, $params, $in_like) = @_;
+    my ($dbh, $type, $params, $in_like, $like_escape_char) = @_;
     
     Carp::Clan::croak "too few parameters\n" unless @$params;
     my $param = shift @$params;
@@ -58,7 +69,8 @@ sub _printf_quote_simple {
             or Carp::Clan::croak "unexpected quote char used: $param\n";
     } elsif ($type eq 's') {
         if ($in_like) {
-            $param =~ s/[%_]/\\$&/g;
+            my $escape_char = defined $like_escape_char ? $like_escape_char : '\\';
+            $param =~ s/[${escape_char}%_]/$escape_char$&/g;
         }
         $param = $dbh->quote($param);
         if ($in_like) {

@@ -1,7 +1,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 20;
+use Test::More tests => 24;
 
 BEGIN { use_ok('DBIx::Printf'); }
 
@@ -30,6 +30,13 @@ is($dbh->printf('select %d,%d,%d', 1, 2, 3), 'select 1,2,3', 'multiple args');
 is($dbh->printf('select 1 like %like()'), "select 1 like ''", 'empty %like');
 is($dbh->printf('select 1 like %like(%s%%)', 'a'), "select 1 like 'a%'", '%like');
 is($dbh->printf('select 1 like %like(%s%%)', "%a_b'"), "select 1 like '\\%a\\_b''%'", '%like escape check');
+is($dbh->printf(q!select 1 like %like(%s%%) escape '\'!, "%a_b'"), qq!select 1 like '\\%a\\_b''%' escape '\\'!, '%like escape check backslash');
+is($dbh->printf(q!select 1 like %like(%s%%) ESCAPE '$'!, "%a_b'"), qq!select 1 like '\$%a\$_b''%' ESCAPE '\$'!, '%like escape check doller');
+is($dbh->printf(q!select 1 like %like(%s%%) Escape ''!, "%a_b'"), qq!select 1 like '%a_b''%' Escape ''!, '%like escape check backslash');
+is($dbh->printf(<<'EOF',"%a_b'"), qq!select 1 like '\*%a\*_b''%'\nESCAPE '\*'\n!, '%like escape check *');
+select 1 like %like(%s%%)
+ESCAPE '*'
+EOF
 
 undef $@;
 eval {
